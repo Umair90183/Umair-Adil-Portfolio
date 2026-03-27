@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Umair Adil — Marketing Strategist</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #EFEAF5;
+    --surface2: #f5f1fb;
+    --border: #ddd5ef;
+    --text: #2a2535;
+    --muted: #777981;
+    --accent: #8E70BD;
+    --accent2: #CCB4E4;
+    --white: #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; font-weight: 300; line-height: 1.6; overflow-x: hidden; cursor: none; }
+  .cursor { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid rgba(142,112,189,.5); border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all .15s; }
+  ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: var(--accent); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 28px 60px; }
+  nav::before { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,.95), transparent); z-index: -1; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; letter-spacing: .05em; color: var(--text); text-decoration: none; }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .3s; }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-cta { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 10px 24px; transition: all .3s; }
+  .nav-cta:hover { background: var(--accent); color: var(--white); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: flex-end; padding: 0 60px 80px; z-index: 2; }
+  .hero-tag { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .25em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp .8s .3s forwards; }
+  .hero-tag::before { content: ''; width: 32px; height: 1px; background: var(--accent); }
+  .hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(4rem,7vw,7.5rem); font-weight: 300; line-height: .95; letter-spacing: -.02em; color: var(--text); margin-bottom: 32px; opacity: 0; animation: fadeUp .9s .5s forwards; }
+  .hero-name em { font-style: italic; color: var(--accent); }
+  .hero-desc { font-size: 1rem; color: var(--muted); max-width: 400px; line-height: 1.7; margin-bottom: 48px; opacity: 0; animation: fadeUp .9s .7s forwards; }
+  .hero-actions { display: flex; gap: 20px; align-items: center; opacity: 0; animation: fadeUp .9s .9s forwards; }
+  .btn-primary { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--white); background: var(--accent); text-decoration: none; padding: 16px 36px; transition: all .3s; }
+  .btn-primary:hover { background: var(--accent2); color: var(--text); transform: translateY(-2px); }
+  .btn-secondary { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: var(--text); text-decoration: none; padding: 16px 0; border-bottom: 1px solid var(--border); transition: all .3s; }
+  .btn-secondary:hover { color: var(--accent); border-color: var(--accent); }
+  .hero-right { position: relative; overflow: hidden; }
+  .hero-img-wrap { position: absolute; inset: 0; opacity: 0; animation: fadeIn 1.2s .4s forwards; }
+  .hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top center; filter: grayscale(20%) contrast(1.05); }
+  .hero-img-wrap::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to right, var(--bg) 0%, transparent 40%), linear-gradient(to top, var(--bg) 0%, transparent 30%); }
+
+  .marquee-wrap { background: var(--accent); padding: 14px 0; overflow: hidden; white-space: nowrap; }
+  .marquee-track { display: inline-flex; animation: marquee 20s linear infinite; }
+  .marquee-track span { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.85); padding: 0 40px; }
+  .marquee-track span::before { content: '✦'; margin-right: 40px; color: var(--accent2); }
+
+  .stats-bar { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--border); }
+  .stat { padding: 40px 60px; border-right: 1px solid var(--border); transition: background .3s; }
+  .stat:last-child { border-right: none; }
+  .stat:hover { background: var(--surface); }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 3rem; font-weight: 600; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+  .stat-label { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+
+  section { padding: 120px 60px; }
+  .section-tag { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .25em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+  .section-tag::before { content: ''; width: 24px; height: 1px; background: var(--accent); }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem,4vw,4rem); font-weight: 300; line-height: 1.1; color: var(--text); margin-bottom: 60px; }
+  .section-title em { font-style: italic; color: var(--accent); }
+
+  .about { background: var(--surface); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 100px; align-items: start; }
+  .about-body { font-size: 1.05rem; font-weight: 300; color: #555060; line-height: 1.85; }
+  .about-body p + p { margin-top: 24px; }
+  .quote-block { border-left: 2px solid var(--accent); padding: 24px 32px; margin-bottom: 48px; background: rgba(142,112,189,.06); }
+  .quote-text { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-style: italic; font-weight: 300; color: var(--text); line-height: 1.4; margin-bottom: 16px; }
+  .quote-attr { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+  .skills-list { display: flex; flex-wrap: wrap; gap: 10px; }
+  .skill-tag { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 8px 16px; transition: all .3s; }
+  .skill-tag:hover { border-color: var(--accent); color: var(--accent); background: rgba(142,112,189,.05); }
+
+  .services-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+  .service-card { border: 1px solid var(--border); margin: -1px 0 0 -1px; padding: 48px 40px; transition: background .3s; position: relative; overflow: hidden; cursor: none; }
+  .service-card::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 2px; background: var(--accent); transition: width .4s; }
+  .service-card:hover::before { width: 100%; }
+  .service-card:hover { background: var(--surface); }
+  .service-num { font-family: 'DM Mono', monospace; font-size: .62rem; color: var(--accent); letter-spacing: .15em; margin-bottom: 24px; }
+  .service-title { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; color: var(--text); margin-bottom: 16px; line-height: 1.2; }
+  .service-desc { font-size: .9rem; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+  .service-hint { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); opacity: 0; transition: opacity .3s; }
+  .service-card:hover .service-hint { opacity: 1; }
+
+  .work { background: var(--surface); }
+  .work-list { display: flex; flex-direction: column; }
+  .work-item { display: grid; grid-template-columns: 80px 1fr auto; align-items: center; gap: 40px; padding: 36px 0; border-bottom: 1px solid var(--border); transition: all .3s; position: relative; }
+  .work-item::before { content: ''; position: absolute; left: -60px; right: -60px; top: 0; bottom: 0; background: rgba(142,112,189,.05); opacity: 0; transition: opacity .3s; }
+  .work-item:hover::before { opacity: 1; }
+  .work-num { font-family: 'DM Mono', monospace; font-size: .7rem; color: var(--accent); letter-spacing: .1em; }
+  .work-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 400; color: var(--text); margin-bottom: 6px; transition: color .3s; }
+  .work-item:hover .work-title { color: var(--accent); }
+  .work-tags { display: flex; gap: 10px; }
+  .work-tag { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); padding: 4px 12px; }
+  .work-arrow { font-size: 1.2rem; color: var(--muted); transition: all .3s; text-decoration: none; }
+  .work-item:hover .work-arrow { color: var(--accent); transform: translate(4px,-4px); }
+
+  .testimonial-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; background: var(--border); }
+  .testi-card { background: var(--bg); padding: 52px 48px; transition: background .3s; }
+  .testi-card:hover { background: var(--surface2); }
+  .testi-stars { display: flex; gap: 4px; margin-bottom: 24px; }
+  .testi-stars span { color: var(--accent); font-size: .9rem; }
+  .testi-text { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-style: italic; font-weight: 300; color: var(--text); line-height: 1.6; margin-bottom: 28px; }
+  .testi-name { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .testi-role { font-size: .8rem; color: var(--muted); }
+
+  .contact { background: var(--bg); display: grid; grid-template-columns: 1fr 1fr; padding: 0; border-top: 1px solid var(--border); }
+  .contact-left { padding: 120px 60px; display: flex; flex-direction: column; justify-content: center; }
+  .contact-right { background: var(--accent); padding: 120px 60px; display: flex; flex-direction: column; justify-content: center; }
+  .contact-right .section-title { color: rgba(255,255,255,.95); margin-bottom: 40px; }
+  .contact-right .section-title em { color: var(--accent2); font-style: italic; }
+  .contact-links { display: flex; flex-direction: column; }
+  .contact-link { font-family: 'DM Mono', monospace; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 18px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; transition: all .3s; }
+  .contact-link:hover { color: var(--accent); border-color: var(--accent); }
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .contact-form input, .contact-form textarea { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); padding: 16px 20px; font-family: 'Outfit', sans-serif; font-size: .9rem; color: #ffffff; outline: none; resize: none; transition: background .3s; width: 100%; }
+  .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,.55); }
+  .contact-form input:focus, .contact-form textarea:focus { background: rgba(255,255,255,.2); }
+  .contact-form textarea { height: 110px; }
+  .btn-dark { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; background: var(--white); color: var(--accent); border: none; padding: 16px 36px; cursor: none; transition: all .3s; align-self: flex-start; font-weight: 500; }
+  .btn-dark:hover { background: var(--accent2); color: var(--text); transform: translateY(-2px); }
+
+  footer { padding: 32px 60px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); }
+  .footer-copy { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .1em; color: var(--muted); }
+  .footer-socials { display: flex; gap: 24px; }
+  .footer-socials a { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .3s; }
+  .footer-socials a:hover { color: var(--accent); }
+
+  /* ═══ MODAL ═══ */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(42,37,53,.75);
+    backdrop-filter: blur(12px);
+    z-index: 5000;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .4s;
+    padding: 24px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    max-width: 740px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    transform: translateY(40px);
+    transition: transform .45s cubic-bezier(.16,1,.3,1);
+  }
+  .modal-overlay.open .modal-box { transform: translateY(0); }
+  .modal-header {
+    padding: 48px 52px 32px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: var(--white); z-index: 2;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
+  }
+  .modal-num { font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .2em; color: var(--accent); margin-bottom: 10px; }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 400; color: var(--text); line-height: 1.1; }
+  .modal-close { font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); background: none; border: 1px solid var(--border); padding: 10px 18px; cursor: none; transition: all .3s; flex-shrink: 0; margin-top: 6px; }
+  .modal-close:hover { color: var(--accent); border-color: var(--accent); }
+  .modal-body { padding: 44px 52px 56px; }
+  .modal-intro { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-style: italic; font-weight: 300; color: var(--text); line-height: 1.75; margin-bottom: 44px; border-left: 2px solid var(--accent); padding-left: 24px; }
+  .modal-section { margin-bottom: 36px; }
+  .modal-section-label { font-family: 'DM Mono', monospace; font-size: .6rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 12px; }
+  .modal-section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .modal-section p { font-size: .95rem; font-weight: 300; color: #555060; line-height: 1.8; }
+  .modal-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .modal-list li { font-size: .93rem; font-weight: 300; color: #555060; padding-left: 22px; position: relative; line-height: 1.7; }
+  .modal-list li::before { content: '✦'; position: absolute; left: 0; color: var(--accent); font-size: .5rem; top: 7px; }
+  .modal-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 36px; padding-top: 36px; border-top: 1px solid var(--border); }
+  .modal-tag { font-family: 'DM Mono', monospace; font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(142,112,189,.25); padding: 7px 14px; background: rgba(142,112,189,.05); }
+  .modal-cta-row { margin-top: 36px; }
+  .modal-cta-row a { font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; color: #fff; background: var(--accent); text-decoration: none; padding: 15px 32px; display: inline-block; transition: all .3s; }
+  .modal-cta-row a:hover { background: var(--accent2); color: var(--text); transform: translateY(-2px); }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes marquee { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+  .reveal { opacity:0; transform:translateY(32px); transition: opacity .8s, transform .8s; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  /* Subtle grain overlay */
+  body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:.018; pointer-events:none; z-index:1000; }
+
+  @media (max-width:900px) {
+    nav { padding:20px 24px; } .nav-links { display:none; }
+    section { padding:80px 24px; }
+    .hero { grid-template-columns:1fr; }
+    .hero-right { height:55vw; } .hero-left { padding:120px 24px 60px; }
+    .hero-name { font-size:3.5rem; }
+    .stats-bar { grid-template-columns:repeat(2,1fr); } .stat { padding:28px 24px; }
+    .about-grid { grid-template-columns:1fr; gap:48px; }
+    .services-grid { grid-template-columns:1fr; }
+    .contact { grid-template-columns:1fr; }
+    .contact-right, .contact-left { padding:60px 24px; }
+    footer { flex-direction:column; gap:16px; }
+    .work-item { grid-template-columns:60px 1fr auto; gap:16px; }
+    .modal-header { padding:32px 28px 24px; } .modal-body { padding:32px 28px 44px; }
+    .modal-title { font-size:2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="#" class="nav-logo">Umair Adil</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#testimonials">Testimonials</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Let's Talk</a>
+</nav>
+
+<section class="hero" id="home">
+  <div class="hero-left">
+    <div class="hero-tag">Marketing Strategist · Brand Builder</div>
+    <h1 class="hero-name">I Help<br>Brands <em>Grow</em><br>With Purpose.</h1>
+    <p class="hero-desc">From strategy to execution — I build campaigns that generate leads, build authority, and drive measurable growth.</p>
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-secondary">Let's Work Together →</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-wrap">
+      <img src="https://umairadil.in/img/umair2.jpg" alt="Umair Adil" />
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span>Performance Marketing</span><span>Brand Strategy</span><span>Content Systems</span><span>SEO &amp; Growth</span><span>Social Media</span><span>Lead Generation</span><span>Digital Campaigns</span><span>Brand Positioning</span>
+    <span>Performance Marketing</span><span>Brand Strategy</span><span>Content Systems</span><span>SEO &amp; Growth</span><span>Social Media</span><span>Lead Generation</span><span>Digital Campaigns</span><span>Brand Positioning</span>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Years of Experience</div></div>
+  <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Brands Worked With</div></div>
+  <div class="stat"><div class="stat-num">50+</div><div class="stat-label">Campaigns Executed</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Results-Driven</div></div>
+</div>
+
+<section class="about" id="about">
+  <div class="about-grid reveal">
+    <div>
+      <div class="section-tag">About Me</div>
+      <h2 class="section-title">Building brands through strategy, <em>systems,</em> and smart marketing.</h2>
+      <div class="about-body">
+        <p>I'm Umair Adil, a marketing strategist and content creator focused on building brands that grow with purpose. With experience in performance marketing, content systems, and brand positioning, I help businesses turn ideas into structured growth.</p>
+        <p>Over the past few years, I've worked on social media management, performance campaigns, brand storytelling, and digital content creation — from college societies to business clients.</p>
+        <p>Currently pursuing B.Com (Hons), I'm continuously building expertise in performance marketing, SEO, branding, and digital systems. My goal is to establish a career as a marketing consultant who delivers predictable growth for businesses.</p>
+      </div>
+    </div>
+    <div>
+      <div class="quote-block">
+        <p class="quote-text">"Strategy first. Creativity second. Results always."</p>
+        <p class="quote-attr">— Umair Adil</p>
+      </div>
+      <div class="skills-list">
+        <span class="skill-tag">Performance Marketing</span><span class="skill-tag">Brand Strategy</span>
+        <span class="skill-tag">SEO</span><span class="skill-tag">Content Systems</span>
+        <span class="skill-tag">Social Media</span><span class="skill-tag">Campaign Planning</span>
+        <span class="skill-tag">Lead Generation</span><span class="skill-tag">Analytics</span>
+        <span class="skill-tag">Brand Positioning</span><span class="skill-tag">Storytelling</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-tag reveal">What I Do</div>
+  <h2 class="section-title reveal">Services built for <em>real results.</em></h2>
+  <div class="services-grid reveal">
+    <div class="service-card" data-service="01">
+      <div class="service-num">01</div>
+      <h3 class="service-title">Brand Strategy</h3>
+      <p class="service-desc">From positioning to voice — I craft complete brand strategies that differentiate your business and build long-term authority in your market.</p>
+      <div class="service-hint">Click to learn more →</div>
+    </div>
+    <div class="service-card" data-service="02">
+      <div class="service-num">02</div>
+      <h3 class="service-title">Performance Marketing</h3>
+      <p class="service-desc">Data-driven paid campaigns across social and search. I build ad systems optimized for lead generation, conversions, and measurable ROI.</p>
+      <div class="service-hint">Click to learn more →</div>
+    </div>
+    <div class="service-card" data-service="03">
+      <div class="service-num">03</div>
+      <h3 class="service-title">Content Systems</h3>
+      <p class="service-desc">Systematic content creation that builds authority. I develop content calendars, scripts, and formats designed to grow and convert audiences.</p>
+      <div class="service-hint">Click to learn more →</div>
+    </div>
+    <div class="service-card" data-service="04">
+      <div class="service-num">04</div>
+      <h3 class="service-title">Social Media Management</h3>
+      <p class="service-desc">End-to-end management of social presence — from strategy and content to analytics and community building across platforms.</p>
+      <div class="service-hint">Click to learn more →</div>
+    </div>
+    <div class="service-card" data-service="05">
+      <div class="service-num">05</div>
+      <h3 class="service-title">SEO &amp; Digital Growth</h3>
+      <p class="service-desc">Search-led growth strategies combining technical SEO, content optimization, and digital PR to drive sustainable organic traffic.</p>
+      <div class="service-hint">Click to learn more →</div>
+    </div>
+    <div class="service-card" data-service="06">
+      <div class="service-num">06</div>
+      <h3 class="service-title">Marketing Consulting</h3>
+      <p class="service-desc">Strategic advisory for businesses looking to scale. I audit existing marketing, identify gaps, and build growth roadmaps with clear priorities.</p>
+      <div class="service-hint">Click to learn more →</div>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="section-tag reveal">Selected Work</div>
+  <h2 class="section-title reveal">Projects that <em>moved the needle.</em></h2>
+  <div class="work-list reveal">
+    <div class="work-item">
+      <span class="work-num">01</span>
+      <div class="work-info">
+        <h3 class="work-title">B2B Lead Generation Campaign</h3>
+        <div class="work-tags"><span class="work-tag">Performance Marketing</span><span class="work-tag">LinkedIn Ads</span></div>
+      </div>
+      <a href="#" class="work-arrow">↗</a>
+    </div>
+    <div class="work-item">
+      <span class="work-num">02</span>
+      <div class="work-info">
+        <h3 class="work-title">Brand Identity &amp; Positioning</h3>
+        <div class="work-tags"><span class="work-tag">Branding</span><span class="work-tag">Strategy</span></div>
+      </div>
+      <a href="#" class="work-arrow">↗</a>
+    </div>
+    <div class="work-item">
+      <span class="work-num">03</span>
+      <div class="work-info">
+        <h3 class="work-title">College Society Social Growth</h3>
+        <div class="work-tags"><span class="work-tag">Social Media</span><span class="work-tag">Content</span></div>
+      </div>
+      <a href="#" class="work-arrow">↗</a>
+    </div>
+    <div class="work-item">
+      <span class="work-num">04</span>
+      <div class="work-info">
+        <h3 class="work-title">E-Commerce Content System</h3>
+        <div class="work-tags"><span class="work-tag">Content Systems</span><span class="work-tag">SEO</span></div>
+      </div>
+      <a href="#" class="work-arrow">↗</a>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="section-tag reveal">Testimonials</div>
+  <h2 class="section-title reveal">What clients <em>say.</em></h2>
+  <div class="testimonial-grid reveal">
+    <div class="testi-card">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="testi-text">"Umair brought a level of strategic clarity to our marketing that we hadn't seen before. Our leads doubled within the first two months."</p>
+      <div class="testi-name">Client Name</div><div class="testi-role">Founder, Brand / Company</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="testi-text">"He doesn't just post content — he builds systems. Our social media went from random to results-driven in just weeks."</p>
+      <div class="testi-name">Client Name</div><div class="testi-role">Marketing Manager, Company</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="testi-text">"Working with Umair was effortless. He understood our audience immediately and created campaigns that actually converted."</p>
+      <div class="testi-name">Client Name</div><div class="testi-role">CEO, Startup</div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+      <p class="testi-text">"Thoughtful, data-backed, and creative. Umair's approach to branding helped us reposition and stand out in a crowded market."</p>
+      <div class="testi-name">Client Name</div><div class="testi-role">Director, Agency</div>
+    </div>
+  </div>
+</section>
+
+<div class="contact" id="contact">
+  <div class="contact-left">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title" style="margin-bottom:40px;">Have a project<br>in <em>mind?</em></h2>
+    <div class="contact-links">
+      <a href="mailto:hello@umairadil.in" class="contact-link">Email <span>hello@umairadil.in</span></a>
+      <a href="https://linkedin.com/in/umairadil" class="contact-link" target="_blank">LinkedIn <span>↗</span></a>
+      <a href="https://instagram.com/umairadil" class="contact-link" target="_blank">Instagram <span>↗</span></a>
+    </div>
+  </div>
+  <div class="contact-right">
+    <h2 class="section-title">Let's build <em>something.</em></h2>
+    <form class="contact-form" onsubmit="return false;">
+      <input type="text" placeholder="Your Name" />
+      <input type="email" placeholder="Your Email" />
+      <input type="text" placeholder="Project Type" />
+      <textarea placeholder="Tell me about your project..."></textarea>
+      <button type="submit" class="btn-dark">Send Message →</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-copy">© 2025 Umair Adil. All rights reserved.</div>
+  <div class="footer-socials">
+    <a href="#">LinkedIn</a><a href="#">Instagram</a><a href="#">Twitter</a>
+  </div>
+</footer>
+
+<!-- ═══ SERVICE DETAIL MODAL ═══ -->
+<div class="modal-overlay" id="serviceModal">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-header">
+      <div>
+        <div class="modal-num" id="modalNum"></div>
+        <h2 class="modal-title" id="modalTitle"></h2>
+      </div>
+      <button class="modal-close" id="modalClose">✕ Close</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  /* Cursor */
+  const cursor = document.getElementById('cursor');
+  const ring   = document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
+  (function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+
+  /* Scroll reveal */
+  const ro = new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add('visible')),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+  /* Service data */
+  const S = {
+    '01':{ title:'Brand Strategy',
+      intro:'A great brand is not just a logo — it\'s a complete system of meaning. I help businesses define who they are, who they serve, and why they matter in a way that drives real commercial results.',
+      why:'Brand strategy is the foundation of every marketing decision. Without it, campaigns feel scattered and inconsistent. With it, every touchpoint reinforces the same powerful message and builds long-term trust.',
+      includes:['Brand positioning & competitive differentiation','Target audience research & persona development','Brand voice, tone & messaging framework','Visual identity direction & brand guidelines','Brand story & core narrative development','Internal brand alignment workshops'],
+      outcome:'You\'ll walk away with a clear, documented brand strategy your team can execute consistently — one that attracts the right customers and repels the wrong ones.',
+      tags:['Positioning','Brand Voice','Messaging','Identity','Research','Guidelines'] },
+
+    '02':{ title:'Performance Marketing',
+      intro:'I build paid advertising systems that generate measurable ROI — not just clicks and impressions. Every campaign is built with a clear funnel, tested creatives, and relentless data-driven optimization.',
+      why:'Performance marketing lives and dies by numbers. I set clear KPIs from day one and optimize against them — whether that\'s cost per lead, ROAS, or customer acquisition cost.',
+      includes:['Meta (Facebook & Instagram) ad campaigns','Google Search & Display advertising','LinkedIn B2B lead generation','Landing page strategy & conversion optimization','A/B testing & creative iteration','Weekly performance reporting & insights'],
+      outcome:'A fully operational paid marketing engine with clear attribution, tested creatives, and a scalable structure you can grow with confidence.',
+      tags:['Meta Ads','Google Ads','LinkedIn','Lead Gen','CRO','Analytics'] },
+
+    '03':{ title:'Content Systems',
+      intro:'Most brands create content randomly. I build content systems — structured, repeatable frameworks that produce consistent, high-quality output that grows audiences and drives conversions.',
+      why:'Content without a system burns out teams and produces inconsistent results. I design the entire engine: strategy, formats, calendars, templates, and distribution — so content becomes a growth lever, not a chore.',
+      includes:['Content strategy & pillar framework','Editorial calendar & content planning','Short-form & long-form content creation','Video script writing & repurposing frameworks','Platform-specific content adaptation','Content performance tracking & iteration'],
+      outcome:'A documented, delegatable content system that produces 30+ days of content consistently — without burning out your team or sacrificing quality.',
+      tags:['Content Strategy','Scripting','Editorial','Video','Distribution','SEO'] },
+
+    '04':{ title:'Social Media Management',
+      intro:'I manage social media as a brand-building and lead-generation channel — not just a place to post pretty pictures. Every piece of content has a purpose and a place in a broader strategy.',
+      why:'Social media is your brand\'s most visible real estate. I handle everything from strategy and content creation to publishing, community management, and analytics — so you can focus on running your business.',
+      includes:['Monthly social media strategy & calendar','Content creation: copy, creatives & captions','Scheduling, publishing & platform management','Community engagement & DM handling','Influencer & collaboration outreach','Monthly analytics report & strategic review'],
+      outcome:'A consistently active, on-brand social presence that grows your following, builds authority, and generates inbound interest — on autopilot.',
+      tags:['Instagram','LinkedIn','Twitter/X','Community','Analytics','Scheduling'] },
+
+    '05':{ title:'SEO & Digital Growth',
+      intro:'I build sustainable organic growth strategies that compound over time. Unlike paid ads that stop when you stop paying, SEO builds an asset — one that keeps driving traffic and leads for years.',
+      why:'SEO in 2025 is about authority, relevance, and user experience. I combine technical foundations with strategic content to build rankings that last — and attract visitors who actually convert.',
+      includes:['Technical SEO audit & fixes','Keyword research & content gap analysis','On-page SEO optimisation','Content strategy for organic growth','Link building & digital PR outreach','Monthly ranking & traffic reporting'],
+      outcome:'A clear SEO roadmap with prioritised actions, measurable progress in organic rankings, and a content strategy that compounds in value over time.',
+      tags:['Technical SEO','Keywords','Content','Link Building','Analytics','CRO'] },
+
+    '06':{ title:'Marketing Consulting',
+      intro:'Sometimes you don\'t need a full agency — you need a sharp strategist who can see what\'s broken, what\'s working, and what to do next. That\'s exactly what I offer.',
+      why:'I work with founders and marketing teams as a fractional strategic partner — bringing structure, clarity, and direction to your marketing without the cost of a full-time CMO.',
+      includes:['Full marketing audit & gap analysis','Growth strategy & 90-day roadmap','Team structure & process recommendations','Channel mix & budget allocation advice','Campaign review & creative feedback','Ongoing advisory calls & Slack access'],
+      outcome:'Clarity on exactly what to focus on, what to stop doing, and how to build a marketing function that drives predictable, scalable growth.',
+      tags:['Strategy','Audit','Roadmap','Advisory','Fractional CMO','Growth'] }
+  };
+
+  /* Open */
+  document.querySelectorAll('.service-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const d = S[card.dataset.service];
+      if (!d) return;
+      document.getElementById('modalNum').textContent   = card.dataset.service;
+      document.getElementById('modalTitle').textContent = d.title;
+      document.getElementById('modalBody').innerHTML = `
+        <p class="modal-intro">${d.intro}</p>
+        <div class="modal-section">
+          <div class="modal-section-label">Why It Matters</div>
+          <p>${d.why}</p>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-label">What's Included</div>
+          <ul class="modal-list">${d.includes.map(i=>`<li>${i}</li>`).join('')}</ul>
+        </div>
+        <div class="modal-section">
+          <div class="modal-section-label">The Outcome</div>
+          <p>${d.outcome}</p>
+        </div>
+        <div class="modal-tags">${d.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('')}</div>
+        <div class="modal-cta-row"><a href="#contact" onclick="closeModal()">Work With Me →</a></div>
+      `;
+      document.getElementById('modalBox').scrollTop = 0;
+      document.getElementById('serviceModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  /* Close */
+  function closeModal() {
+    document.getElementById('serviceModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  document.getElementById('serviceModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('serviceModal')) closeModal();
+  });
+</script>
+</body>
+</html>
